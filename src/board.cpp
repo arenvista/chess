@@ -35,13 +35,22 @@ Board::Board(char board[8][8]) {
 }
 
 void Board::printBoard(){
+    char rows[8] = {'A','B','C','D','E','F','G','H'};
     for (int i = 0; i < 8; ++i){
+        std::cout << i << " ";
         for (int j = 0; j < 8; ++j){
             std::cout << m_board[i][j] << " ";
         }
         std::cout << std::endl;
     }
+    std::cout << "  ";
+    for(int i=0; i<8; i++){
+        std::cout << rows[i] << " ";
+    }
+    std::cout << "\n";
 }
+
+void Board::setCell(Piece::Position pos,  char value){ m_board[pos.ind_row][pos.ind_col] = value; }
 
 std::variant<Pawn> Board::getPiece(Piece::Position starting){
     char p = m_board[starting.ind_row][starting.ind_col];
@@ -51,8 +60,8 @@ std::variant<Pawn> Board::getPiece(Piece::Position starting){
         case 'P':
             std::cout << "Pawn Detected...\n";
             piece = Pawn(p, starting);
+            Pawn test = std::get<Pawn>(piece);
+            test.printDiag();
     }
-    Pawn test = std::get<Pawn>(piece);
-    test.printDiag();
     return piece;
 }
