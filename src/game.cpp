@@ -4,10 +4,11 @@
 
 bool Game::attemptMove(Piece::Position starting, Piece::Position ending){
     auto piece = m_board.getPiece(starting);
+    bool safeKing = m_board.kingIsSafe(starting,ending);
     bool isValidMove = std::visit([ending](auto &&arg) -> bool {
         return arg.validMove(ending);
     }, piece);
-    if(isValidMove){
+    if(isValidMove && safeKing){
         m_board.setCell(starting, ' ');
         m_board.setCell(ending, 'P');
     }
@@ -17,9 +18,11 @@ bool Game::attemptMove(Piece::Position starting, Piece::Position ending){
 
 void Game::runGame(){
     m_board.printBoard();
-    std::string move = m_ui.askForMove();
-    std::cout << "Move is: " << move << "\n";
-    std::array<Piece::Position, 2> move_pos = m_ui.parsePositions(move);
-    attemptMove(move_pos[0], move_pos[1]);
+    while(true){
+        std::string move = m_ui.askForMove();
+        std::cout << "Move is: " << move << "\n";
+        std::array<Piece::Position, 2> move_pos = m_ui.parsePositions(move);
+        attemptMove(move_pos[0], move_pos[1]);
+    }
 }
 

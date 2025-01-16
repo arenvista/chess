@@ -30,6 +30,7 @@ public:
     void printDiag();
 };
 class Pawn : public Piece{
+    std::vector<Piece::Position> m_attack_moves;
 public:
     Pawn();
     Pawn(char c, Position starting_position);
