@@ -18,14 +18,13 @@ Piece::Piece(){}
 // Initializes a Piece with a given character representing color and a starting position.
 Piece::Piece(char c, Position starting_position){
     m_color = isupper(c) ? BLACK_PIECE : WHITE_PIECE;
-    m_color == BLACK_PIECE ? std::cout << "is black" : std::cout << "is white";
     m_position = starting_position;
 }
 
 /// Print the current position (column and row indices) of the chess piece to the console.
 void Piece::printPosition(){ std::cout << "Col:[" << m_position.ind_col << "]    Row:[" << m_position.ind_row << "]\n"; }
 /// Prints the piece's color to the console.
-void Piece::printColor(){ std::cout << "Team: " << m_color << "\n";}
+void Piece::printColor(){ m_color == BLACK_PIECE ? std::cout << "BLACK\n" : std::cout << "WHITE\n"; }
 // Prints the piece's diagonal information, including its position and color.
 void Piece::printDiag(){printPosition(); printColor();}
 

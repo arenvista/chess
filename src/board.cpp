@@ -56,12 +56,16 @@ std::variant<Pawn> Board::getPiece(Piece::Position starting){
     char p = m_board[starting.ind_row][starting.ind_col];
     std::cout << "Selected " << p << "\n";
     std::variant<Pawn> piece {};
-    switch(p){
+    switch(std::toupper(p)){
         case 'P':
-            std::cout << "Pawn Detected...\n";
             piece = Pawn(p, starting);
             Pawn test = std::get<Pawn>(piece);
             test.printDiag();
     }
     return piece;
 }
+
+bool Board::kingIsSafe(Piece::Position starting, Piece::Position ending){
+    return true;
+}
+
