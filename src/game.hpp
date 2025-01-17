@@ -1,5 +1,7 @@
+#pragma once
 #include "board.hpp"
 #include "piece.hpp"
+#include "position.hpp"
 #include "ui.hpp"
 
 class Game{
@@ -7,6 +9,6 @@ class Game{
     UI m_ui;
     int m_round;
 public:
-    bool attemptMove(Piece::Position starting, Piece::Position ending);
+    bool attemptMove(Position starting, Position ending);
     void runGame();
 };

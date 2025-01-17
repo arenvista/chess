@@ -1,19 +1,31 @@
 #pragma once
-#include "piece.hpp"
-#include <unordered_map>
+#include "board.hpp"
+#include "position.hpp"
+#include <memory>
 #include <variant>
 
+class Piece;
+
+const int BOARD_SIZE = 8;
+
 class Board{
-    char m_board[8][8];
+    char m_board[BOARD_SIZE][BOARD_SIZE];
+    char m_attack_boards[BOARD_SIZE][BOARD_SIZE][2];
 public:
     Board();
-    Board(char board[8][8]);
+    Board(char board[BOARD_SIZE][BOARD_SIZE]);
     /// @brief Prints the current state of the chess board to the console.
     void printBoard();
     /// Set the value of a board cell at a given position.
-    void setCell(Piece::Position pos,  char value);
+    void setCell(Position pos,  char value);
     /// Fetches the pawn piece from a given board position.
-    std::variant<Pawn> getPiece(Piece::Position starting);
+    std::unique_ptr<Piece> getPiece(Position starting);
     /// Checks if the king remains safe after a move from the starting to ending position.
-    bool kingIsSafe(Piece::Position starting, Piece::Position ending);
+    bool kingIsSafe(Position starting, Position ending);
+    /// Prints a visual representation of the board showing all threatened squares.
+    void printThreatBoard();
+    // Generates a board with all possible threats from each piece.
+    void generateThreatBoard();
+    /// Sets the threat status of a cell based on the position and color of a threatening piece.
+    void setThreatCell(Position pos, PieceColor color);
 };

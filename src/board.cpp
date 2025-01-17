@@ -1,9 +1,10 @@
 #include "board.hpp"
-#include "variant"
+#include <cctype>
 #include "memory"
+#include "piece.hpp"
 #include <iostream>
 
-const char INITAL_BOARD[8][8] = {
+const char INITAL_BOARD[BOARD_SIZE][BOARD_SIZE] = {
     // This represents the pieces on the board.
     // Keep in mind that pieces[0][0] represents A1
     // pieces[1][1] represents B2 and so on.
@@ -19,53 +20,99 @@ const char INITAL_BOARD[8][8] = {
 };
 
 Board::Board(){
-    for (int i = 0; i < 8; ++i){
-        for (int j = 0; j < 8; ++j){
+    for (int i = 0; i < BOARD_SIZE; ++i){
+        for (int j = 0; j < BOARD_SIZE; ++j){
             m_board[i][j] = INITAL_BOARD[i][j];
+        }
+    }
+
+    for (int i = 0; i < BOARD_SIZE; ++i){
+        for (int j = 0; j < BOARD_SIZE; ++j){
+            m_attack_boards[i][j][WHITE_PIECE] = ' ';
+        }
+    }
+    for (int i = 0; i < BOARD_SIZE; ++i){
+        for (int j = 0; j < BOARD_SIZE; ++j){
+            m_attack_boards[i][j][BLACK_PIECE] = ' ';
         }
     }
 }
 
-Board::Board(char board[8][8]) {
-    for (int i = 0; i < 8; ++i){
-        for (int j = 0; j < 8; ++j){
+Board::Board(char board[BOARD_SIZE][BOARD_SIZE]) {
+    for (int i = 0; i < BOARD_SIZE; ++i){
+        for (int j = 0; j < BOARD_SIZE; ++j){
             m_board[i][j] = board[i][j];
         }
     }
 }
 
 void Board::printBoard(){
-    char rows[8] = {'A','B','C','D','E','F','G','H'};
-    for (int i = 0; i < 8; ++i){
+    char rows[BOARD_SIZE] = {'A','B','C','D','E','F','G','H'};
+    for (int i = 0; i < BOARD_SIZE; ++i){
         std::cout << i << " ";
-        for (int j = 0; j < 8; ++j){
+        for (int j = 0; j < BOARD_SIZE; ++j){
             std::cout << m_board[i][j] << " ";
         }
         std::cout << std::endl;
     }
     std::cout << "  ";
-    for(int i=0; i<8; i++){
+    for(int i=0; i<BOARD_SIZE; i++){
         std::cout << rows[i] << " ";
     }
     std::cout << "\n";
 }
 
-void Board::setCell(Piece::Position pos,  char value){ m_board[pos.ind_row][pos.ind_col] = value; }
+void Board::setCell(Position pos,  char value){ m_board[pos.row][pos.col] = value; }
 
-std::variant<Pawn> Board::getPiece(Piece::Position starting){
-    char p = m_board[starting.ind_row][starting.ind_col];
-    std::cout << "Selected " << p << "\n";
-    std::variant<Pawn> piece {};
+std::unique_ptr<Piece> Board::getPiece(Position starting){
+    char p = m_board[starting.row][starting.col];
+    // std::cout << "Selected " << p << "\n";
     switch(std::toupper(p)){
         case 'P':
-            piece = Pawn(p, starting);
-            Pawn test = std::get<Pawn>(piece);
-            test.printDiag();
+            return std::make_unique<Pawn>(p, starting); 
+        // Implement the creation of other pieces as required
+        default:
+            return std::make_unique<Pawn>(p, starting);
     }
-    return piece;
+ }
+
+//Threat
+void Board::setThreatCell(Position pos, PieceColor color){
+    // std::cout << "Setting Threat... " << pos.row << pos.col << "\n";
+    color == WHITE_PIECE ? m_attack_boards[pos.row][pos.col][WHITE_PIECE]='*' : m_attack_boards[pos.row][pos.col][BLACK_PIECE]='*';
 }
 
-bool Board::kingIsSafe(Piece::Position starting, Piece::Position ending){
+void Board::generateThreatBoard(){
+    for (int i = 0; i < BOARD_SIZE; ++i){
+        for (int j = 0; j < BOARD_SIZE; ++j){
+            char cell = m_board[i][j];
+            if (cell != ' '){
+                auto piece = getPiece({i,j});
+                // Create a visitor that will call the `move` method on the Piece base class
+                piece->updateThreat(*this);
+            }
+        }
+    }
+}
+
+void Board::printThreatBoard(){
+    std::cout << "PRINTING THREAT\nBLACK ATTACK BOARD\n";
+    for (int i = 0; i < BOARD_SIZE; ++i){
+        for (int j = 0; j < BOARD_SIZE; ++j){
+            std::cout << m_attack_boards[i][j][BLACK_PIECE] << " ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "WHITE ATTACK BOARD\n";
+    for (int i = 0; i < BOARD_SIZE; ++i){
+        for (int j = 0; j < BOARD_SIZE; ++j){
+            std::cout << m_attack_boards[i][j][WHITE_PIECE] << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+bool Board::kingIsSafe(Position starting, Position ending){
     return true;
 }
 

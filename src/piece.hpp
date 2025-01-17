@@ -1,26 +1,17 @@
 #pragma once
-
 #include <vector>
-class Piece{
+#include "position.hpp"
+
+class Board;
+
+class Piece {
 public:
-    enum PieceColor{
-        WHITE_PIECE = 0,
-        BLACK_PIECE = 1
-    };
-    struct Position{
-        int ind_row;
-        int ind_col;
-        // Overload the == operator to compare Position objects
-        bool operator==(const Position& other) const {
-            return ind_row == other.ind_row && ind_col == other.ind_col;
-        }
-    };
     Piece();
     Piece(char c, Position starting_position);
 protected:
     Position m_position {0,0};
     PieceColor m_color;
-    std::vector<Piece::Position> m_moves;
+    std::vector<Position> m_moves;
 public:
     bool validMove(Position target);
     void setPosition(Position current_pos);
@@ -28,11 +19,15 @@ public:
     void printPosition();
     void printColor();
     void printDiag();
+    virtual void updateThreat(Board& board) = 0;
+
+    // virtual void updateThreat(Board& board);
 };
 class Pawn : public Piece{
-    std::vector<Piece::Position> m_attack_moves;
+    std::vector<Position> m_attack_moves;
 public:
     Pawn();
     Pawn(char c, Position starting_position);
+    void updateThreat(Board& board);
 };
 

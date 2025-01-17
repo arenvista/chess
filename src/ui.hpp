@@ -1,7 +1,8 @@
-#include "piece.hpp"
+#pragma once
 #include <string>
 #include <array>
-#include "board.hpp"
+#include <unordered_map>
+#include "position.hpp"
 
 class UI{
 public:
@@ -18,5 +19,5 @@ public:
     bool validateInput(std::string input);
 
     /// Parses two chess positions from a string input.
-    std::array<Piece::Position, 2> parsePositions(std::string input);
+    std::array<Position, 2> parsePositions(std::string input);
 };

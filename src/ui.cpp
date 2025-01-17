@@ -32,13 +32,13 @@ std::string UI::askForMove(){
         return userInput;
 }
 
-std::array<Piece::Position, 2> UI::parsePositions(std::string input){
-    std::array<Piece::Position, 2> positions {};
+std::array<Position, 2> UI::parsePositions(std::string input){
+    std::array<Position, 2> positions {};
     std::array<std::string, 2> input_positions = {input.substr(0,2), input.substr(2,2)};
     for(int i=0; i<2; i++){
         std::string input_pos = input_positions[i];
         // std::cout << "Parsing {"<< input_pos <<"} | Row[" << input_pos[1] <<"]    Col[" << rowMap[input_pos[0]] << "]\n";
-        Piece::Position pos {input_pos[1]-'0', rowMap[input_pos[0]]};
+        Position pos {input_pos[1]-'0', rowMap[input_pos[0]]};
         positions[i] = pos;
     }
     return positions;
