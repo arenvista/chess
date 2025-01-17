@@ -5,7 +5,7 @@
 #include "ui.hpp"
 
 class Game{
-    Board m_board;
+    Board m_game_board;
     UI m_ui;
     int m_round;
 public:

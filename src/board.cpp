@@ -4,6 +4,20 @@
 #include "piece.hpp"
 #include <iostream>
 
+const char INITAL_THREAT_BOARD[BOARD_SIZE][BOARD_SIZE] = {
+    // This represents the pieces on the board.
+    // Keep in mind that pieces[0][0] represents A1
+    // pieces[1][1] represents B2 and so on.
+    // Letters in CAPITAL are white
+    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, 
+};
 const char INITAL_BOARD[BOARD_SIZE][BOARD_SIZE] = {
     // This represents the pieces on the board.
     // Keep in mind that pieces[0][0] represents A1
@@ -19,23 +33,16 @@ const char INITAL_BOARD[BOARD_SIZE][BOARD_SIZE] = {
     { 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r'  }, 
 };
 
-Board::Board(){
+void Board::initalizeBoard(char board[BOARD_SIZE][BOARD_SIZE], const char initalizerBoard[BOARD_SIZE][BOARD_SIZE]){
     for (int i = 0; i < BOARD_SIZE; ++i){
         for (int j = 0; j < BOARD_SIZE; ++j){
-            m_board[i][j] = INITAL_BOARD[i][j];
+            board[i][j] = initalizerBoard[i][j];
         }
     }
+}
 
-    for (int i = 0; i < BOARD_SIZE; ++i){
-        for (int j = 0; j < BOARD_SIZE; ++j){
-            m_attack_boards[i][j][WHITE_PIECE] = ' ';
-        }
-    }
-    for (int i = 0; i < BOARD_SIZE; ++i){
-        for (int j = 0; j < BOARD_SIZE; ++j){
-            m_attack_boards[i][j][BLACK_PIECE] = ' ';
-        }
-    }
+Board::Board(){
+    Board::initalizeBoard(m_board, INITAL_BOARD);
 }
 
 Board::Board(char board[BOARD_SIZE][BOARD_SIZE]) {
@@ -46,12 +53,12 @@ Board::Board(char board[BOARD_SIZE][BOARD_SIZE]) {
     }
 }
 
-void Board::printBoard(){
+void Board::printBoard(const char board[BOARD_SIZE][BOARD_SIZE]){
     char rows[BOARD_SIZE] = {'A','B','C','D','E','F','G','H'};
     for (int i = 0; i < BOARD_SIZE; ++i){
         std::cout << i << " ";
         for (int j = 0; j < BOARD_SIZE; ++j){
-            std::cout << m_board[i][j] << " ";
+            std::cout << board[i][j] << " ";
         }
         std::cout << std::endl;
     }
@@ -76,17 +83,23 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
     }
  }
 
+
+const char (&Board::getBoard() const)[BOARD_SIZE][BOARD_SIZE]{return m_board;}
+const char (&Board::getThreatBoard(PieceColor color) const)[BOARD_SIZE][BOARD_SIZE]{ return color == WHITE_PIECE ? m_white_attack_board : m_black_attack_board; }
+
 //Threat
 void Board::setThreatCell(Position pos, PieceColor color){
     // std::cout << "Setting Threat... " << pos.row << pos.col << "\n";
-    color == WHITE_PIECE ? m_attack_boards[pos.row][pos.col][WHITE_PIECE]='*' : m_attack_boards[pos.row][pos.col][BLACK_PIECE]='*';
+    color == WHITE_PIECE ? m_white_attack_board[pos.row][pos.col]='*' : m_black_attack_board[pos.row][pos.col]='*';
 }
 
 void Board::generateThreatBoard(){
+    Board::initalizeBoard(m_white_attack_board, INITAL_THREAT_BOARD);
+    Board::initalizeBoard(m_black_attack_board, INITAL_THREAT_BOARD);
     for (int i = 0; i < BOARD_SIZE; ++i){
         for (int j = 0; j < BOARD_SIZE; ++j){
             char cell = m_board[i][j];
-            if (cell != ' '){
+            if (cell == 'p' || cell == 'P'){
                 auto piece = getPiece({i,j});
                 // Create a visitor that will call the `move` method on the Piece base class
                 piece->updateThreat(*this);
@@ -96,20 +109,10 @@ void Board::generateThreatBoard(){
 }
 
 void Board::printThreatBoard(){
-    std::cout << "PRINTING THREAT\nBLACK ATTACK BOARD\n";
-    for (int i = 0; i < BOARD_SIZE; ++i){
-        for (int j = 0; j < BOARD_SIZE; ++j){
-            std::cout << m_attack_boards[i][j][BLACK_PIECE] << " ";
-        }
-        std::cout << "\n";
-    }
-    std::cout << "WHITE ATTACK BOARD\n";
-    for (int i = 0; i < BOARD_SIZE; ++i){
-        for (int j = 0; j < BOARD_SIZE; ++j){
-            std::cout << m_attack_boards[i][j][WHITE_PIECE] << " ";
-        }
-        std::cout << "\n";
-    }
+    std::cout << "BLACK ATTACK BOARD:" << std::endl;
+    printBoard(m_black_attack_board);
+    std::cout << "WHITE ATTACK BOARD:" << std::endl;
+    printBoard(m_white_attack_board);
 }
 
 bool Board::kingIsSafe(Position starting, Position ending){
