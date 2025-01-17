@@ -9,7 +9,7 @@ bool Game::attemptMove(Position starting, Position ending){
     if(isValidMove && safeKing){
         std::cout << "valid move\n";
         m_board.setCell(starting, ' ');
-        m_board.setCell(ending, 'P');
+        m_board.setCell(ending, piece->getColor() == BLACK_PIECE ? 'P' : 'p');
     }
     m_board.printBoard();
     return false;

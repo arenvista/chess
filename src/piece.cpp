@@ -33,6 +33,10 @@ void Piece::printColor(){ m_color == BLACK_PIECE ? std::cout << "BLACK\n" : std:
 // Prints the piece's diagonal information, including its position and color.
 void Piece::printDiag(){printPosition(); printColor();}
 
+
+Position Piece::getPosition(){ return m_position; }
+PieceColor Piece::getColor(){ return m_color; }
+
 //Pawn Function ---------------------
 Pawn::Pawn() : Piece(){ }
 Pawn::Pawn(char c, Position starting_position) : Piece(c, starting_position){

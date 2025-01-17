@@ -19,6 +19,10 @@ public:
     void printPosition();
     void printColor();
     void printDiag();
+
+
+    Position getPosition();
+    PieceColor getColor();
     virtual void updateThreat(Board& board) = 0;
 
     // virtual void updateThreat(Board& board);

@@ -15,3 +15,4 @@ enum PieceColor{
     WHITE_PIECE = 0,
     BLACK_PIECE = 1
 };
+
