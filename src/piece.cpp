@@ -84,6 +84,41 @@ bool Pawn::validMove(Position target, Board board){
     return false;
 }
 
+//Knight
+
+void Knight::setSymbol(){ m_symbol = m_color == BLACK_PIECE ? 'N' : 'n';}
+
+Knight::Knight() : Pawn(){ }
+Knight::Knight(char c, Position starting_position){
+    m_position = starting_position;
+    m_color = isupper(c) ? BLACK_PIECE : WHITE_PIECE;
+    m_moves = std::vector<Position>{ {2,1}, {2,-1}, {-2, 1}, {-2,-1} };
+    setSymbol();
+};
+
+bool Knight::validMove(Position target, Board board){
+    Position movement { target.row-m_position.row, target.col-m_position.col};
+    bool isAttack {board.hasPiece(target)};
+    if (isAttack){
+        std::cout << "is attack\n";
+        auto piece_under_attack = board.getPiece(target);
+        if (piece_under_attack->getColor() != m_color){
+            return true;
+        }
+    } else {
+        std::cout << "Current Pos: " << m_position.row << " | " << m_position.col << "\n";
+        std::cout << "Target Pos: " << target.row << " | " << target.col << "\n";
+        std::cout << "Attepting to Move: " << movement.row << " | " << movement.col << "\n";
+        std::cout << "is NOT attack\n";
+        for (Position move : m_moves){
+            std::cout << "Move Possible to: " << move.row << " | " << move.col << "\n";
+            if (movement == move && board.hasPiece(target) == false){ return true; }
+        }
+    }
+    // std::cout << "move invalid\n";
+    return false;
+}
+
 //Bishop Function ------
 void Bishop::setSymbol(){ m_symbol = m_color == BLACK_PIECE ? 'B' : 'b';}
 
@@ -138,7 +173,7 @@ bool Bishop::validMove(Position target, Board board){
     return false;
 }
 
-    Bishop::Bishop(char c, Position starting_position, Board board) : Piece(){
+Bishop::Bishop(char c, Position starting_position, Board board) : Piece(){
     m_position = starting_position;
     std::cout  << "Creating Bishop @: " << starting_position.row << " | " << starting_position.col << "\n";
     generateMoves(board);
@@ -160,14 +195,14 @@ void Rook::generateMoves(Board board){
         bool res = board.hasPiece({row+m_position.row, col+m_position.col});
         std::cout << "Result: " << res << "\n"; 
         while(!res && row<BOARD_SIZE && row > -BOARD_SIZE && col <BOARD_SIZE && col > -BOARD_SIZE){
-                std::cout << "Row: " << row << " Col: " << col << " Has Piece Result=" << res  << " Char:" << board.getBoard()[row+m_position.row][col+m_position.col] << " At Place:" << row+m_position.row << flipRowMap[col+m_position.col] << " \n";
-                std::cout << "Adding Move to Rook: " << row << " | " << col << "\n";
-                m_moves.push_back({row,col});
-                if(row==0 && col<0){col--;}
-                if(row==0 && col>0){col++;}
-                if(col==0 && row<0){row--;}
-                if(col==0 && row>0){row++;}
-                res = board.hasPiece({row+m_position.row, col+m_position.col});
+            std::cout << "Row: " << row << " Col: " << col << " Has Piece Result=" << res  << " Char:" << board.getBoard()[row+m_position.row][col+m_position.col] << " At Place:" << row+m_position.row << flipRowMap[col+m_position.col] << " \n";
+            std::cout << "Adding Move to Rook: " << row << " | " << col << "\n";
+            m_moves.push_back({row,col});
+            if(row==0 && col<0){col--;}
+            if(row==0 && col>0){col++;}
+            if(col==0 && row<0){row--;}
+            if(col==0 && row>0){row++;}
+            res = board.hasPiece({row+m_position.row, col+m_position.col});
         }
         std::cout << "Finished Direction\n";
         if(board.hasPiece({row, col})){
@@ -182,13 +217,13 @@ bool Rook::validMove(Position target, Board board){
     bool isAttack {false};
     std::cout << "Validating Moves ##\n";
     for (Position attack: m_attack_moves){ if (attack == movement){isAttack = true;} }
-    if (isAttack){
+    if (isAttack){ //if attack
         std::cout << "is attack\n";
         auto piece_under_attack = board.getPiece(target);
         if (board.hasPiece(target) && piece_under_attack->getColor() != m_color){
             return true;
         }
-    } else {
+    } else { //not an attack
         std::cout << "Current Pos: " << m_position.row << " | " << m_position.col << "\n";
         std::cout << "Targeting" << target.row << " | " << target.col << "\n";
         std::cout << "Attepting to Move: " << movement.row << " | " << movement.col << "\n";
@@ -202,7 +237,7 @@ bool Rook::validMove(Position target, Board board){
     return false;
 }
 
-    Rook::Rook(char c, Position starting_position, Board board) : Bishop(){
+Rook::Rook(char c, Position starting_position, Board board) : Bishop(){
     m_color = isupper(c) ? BLACK_PIECE : WHITE_PIECE;
     m_position = starting_position;
     std::cout  << "Creating Rook @: " << starting_position.row << " | " << starting_position.col << "Given: " << c << "\n";
