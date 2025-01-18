@@ -10,6 +10,7 @@ UI::UI(){
     rowMap['e'] = E;
     rowMap['f'] = F;
     rowMap['g'] = G;
+    rowMap['h'] = H;
 }
 
 bool UI::validateInput(std::string input){

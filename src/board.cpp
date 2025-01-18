@@ -25,10 +25,10 @@ const char INITAL_BOARD[BOARD_SIZE][BOARD_SIZE] = {
     // Letters in CAPITAL are white
     { 'R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R'  },
     { 'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P'  },
-    { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 },
-    { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 },
-    { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 },
-    { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 },
+    { '-', '-', '-', '-', '-', '-', '-', '-' },
+    { '-', '-', '-', '-', '-', '-', '-', '-' },
+    { '-', '-', '-', '-', '-', '-', '-', '-' },
+    { '-', '-', '-', '-', '-', '-', '-', '-' },
     { 'p',  'p',  'p',  'p',  'p',  'p',  'p',  'p'  },
     { 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r'  }, 
 };
@@ -77,6 +77,11 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
     switch(std::toupper(p)){
         case 'P':
             return std::make_unique<Pawn>(p, starting); 
+            break;
+        case 'B':
+            std::cout << "Making Bishop: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            return std::make_unique<Bishop>(p, starting, *this); 
+            break;
         // Implement the creation of other pieces as required
         default:
             return std::make_unique<Pawn>(p, starting);
@@ -99,11 +104,9 @@ void Board::generateThreatBoard(){
     for (int i = 0; i < BOARD_SIZE; ++i){
         for (int j = 0; j < BOARD_SIZE; ++j){
             char cell = m_board[i][j];
-            if (cell == 'p' || cell == 'P'){
                 auto piece = getPiece({i,j});
                 // Create a visitor that will call the `move` method on the Piece base class
                 piece->updateThreat(*this);
-            }
         }
     }
 }
@@ -119,3 +122,7 @@ bool Board::kingIsSafe(Position starting, Position ending){
     return true;
 }
 
+bool Board::hasPiece(Position target){
+    if (m_board[target.row][target.col] != '-'){return true;}
+    return false;
+}

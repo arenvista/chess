@@ -7,7 +7,7 @@
 class UI{
 public:
     UI();
-    enum Rows{ A, B, C, D, E, F, G };
+    enum Rows{ A, B, C, D, E, F, G, H };
     std::unordered_map<char, Rows> rowMap;
 
     /// Asks the player for their next move in a text-based interface.

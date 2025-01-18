@@ -33,4 +33,5 @@ public:
     void setThreatCell(Position pos, PieceColor color);
     const char (&getBoard() const)[BOARD_SIZE][BOARD_SIZE];
     const char (&getThreatBoard(PieceColor color) const)[BOARD_SIZE][BOARD_SIZE];
+    bool hasPiece(Position target);
 };
