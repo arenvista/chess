@@ -77,12 +77,12 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
     switch(std::toupper(p)){
         case 'P':
             return std::make_unique<Pawn>(p, starting); 
-            break;
         case 'B':
             std::cout << "Making Bishop: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Bishop>(p, starting, *this); 
-            break;
-        // Implement the creation of other pieces as required
+        case 'R':
+            std::cout << "Making Rook: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            return std::make_unique<Rook>(p, starting, *this); 
         default:
             return std::make_unique<Pawn>(p, starting);
     }
@@ -123,6 +123,6 @@ bool Board::kingIsSafe(Position starting, Position ending){
 }
 
 bool Board::hasPiece(Position target){
-    if (m_board[target.row][target.col] != '-'){return true;}
-    return false;
+    if (m_board[target.row][target.col] == '-'){return false;}
+    return true;
 }

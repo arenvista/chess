@@ -3,11 +3,13 @@
 #include <variant>
 
 bool Game::attemptMove(Position starting, Position ending){
+    std::cout <<"Attempting Move\n";
     auto piece = m_game_board.getPiece(starting);
     bool safeKing = m_game_board.kingIsSafe(starting, ending);
     bool isValidMove = piece->validMove(ending, m_game_board);
+    std::cout <<"Validated Moves...\n";
     if(isValidMove && safeKing){
-        std::cout << "valid move\n";
+        std::cout << "Setting Cell...\n";
         m_game_board.setCell(starting, '-');
         m_game_board.setCell(ending, piece->getSymbol());
     }
