@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_map>
 struct Position {
     int row;
     int col;
@@ -16,3 +17,6 @@ enum PieceColor{
     BLACK_PIECE = 1
 };
 
+
+enum Rows{ A, B, C, D, E, F, G, H };
+extern std::unordered_map<char, Rows> rowMap; 

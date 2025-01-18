@@ -2,16 +2,7 @@
 #include <iostream>
 #include <regex>
 
-UI::UI(){
-    rowMap['a'] = A;
-    rowMap['b'] = B;
-    rowMap['c'] = C;
-    rowMap['d'] = D;
-    rowMap['e'] = E;
-    rowMap['f'] = F;
-    rowMap['g'] = G;
-    rowMap['h'] = H;
-}
+UI::UI(){};
 
 bool UI::validateInput(std::string input){
     std::regex pattern(R"([a-zA-Z]\d[a-zA-Z]\d)");

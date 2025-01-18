@@ -23,7 +23,7 @@ public:
     void printDiag();
 
 
-    virtual const char getSymbol()=0;
+    const char getSymbol();
     Position getPosition();
     PieceColor getColor();
     virtual void updateThreat(Board& board) = 0;
@@ -38,7 +38,6 @@ public:
     Pawn();
     Pawn(char c, Position starting_position);
     virtual void setSymbol();
-    virtual const char getSymbol();
     void updateThreat(Board& board);
     bool validMove(Position target, Board board);
 };
@@ -50,8 +49,18 @@ public:
     Bishop();
     Bishop(char c, Position starting_position, Board board);
     virtual void setSymbol();
-    virtual const char getSymbol();
-    void updateThreat(Board& board);
+    virtual void updateThreat(Board& board);
+    virtual bool validMove(Position target, Board board);
+    virtual void generateMoves(Board board);
+};
+
+class Rook : public Bishop{
+    std::vector<Position> m_attack_moves;
+public:
+    Rook();
+    Rook(char c, Position starting_position, Board board);
+    virtual void setSymbol();
+    virtual void updateThreat(Board& board);
     bool validMove(Position target, Board board);
     void generateMoves(Board board);
 };
