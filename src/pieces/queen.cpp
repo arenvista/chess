@@ -12,8 +12,7 @@ void Queen::generateMoves(Board board){
         int col = direction.col;
         bool res = board.hasPiece({row+m_position.row, col+m_position.col});
         std::cout << "Row: " << row << "Col: " << col << "Has Piece Result:=" << res  << "\n";
-        while(!board.hasPiece({row+m_position.row, col+m_position.col}) ){
-            while(row<BOARD_SIZE && row > -BOARD_SIZE && col <BOARD_SIZE && col > -BOARD_SIZE){
+        while(!board.hasPiece({row+m_position.row, col+m_position.col}) && (row<BOARD_SIZE && row > -BOARD_SIZE && col <BOARD_SIZE && col > -BOARD_SIZE) ){
 
                 std::cout << "Adding Move to Queen: " << row << " | " << col << "\n";
                 m_moves.push_back({row,col});
@@ -40,7 +39,6 @@ void Queen::generateMoves(Board board){
                     row++;
                 }
             }
-        }
         if(board.hasPiece({row, col})){
             m_attack_moves.push_back({row,col});
         }
