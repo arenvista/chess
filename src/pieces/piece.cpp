@@ -1,5 +1,5 @@
-#include "piece.hpp"
 #include "position.hpp"
+#include "include_piece.hpp"
 #include "board.hpp"
 #include <cctype>  
 #include <iostream>

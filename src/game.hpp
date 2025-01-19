@@ -1,6 +1,5 @@
 #pragma once
 #include "board.hpp"
-#include "piece.hpp"
 #include "position.hpp"
 #include "ui.hpp"
 

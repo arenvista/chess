@@ -2,7 +2,6 @@
 #include <vector>
 #include "position.hpp"
 
-
 class Board;
 
 class Piece {
@@ -33,45 +32,7 @@ public:
 };
 
 
-class Pawn : public Piece{
-    std::vector<Position> m_attack_moves;
-public:
-    Pawn();
-    Pawn(char c, Position starting_position);
-    virtual void setSymbol();
-    void updateThreat(Board& board);
-    virtual bool validMove(Position target, Board board);
-};
-
-class Knight : public Pawn{
-    std::vector<Position> m_attack_moves;
-public:
-    Knight();
-    Knight(char c, Position starting_position);
-    bool validMove(Position target, Board board);
-    void setSymbol();
-};
 
 
-class Bishop : public Piece{
-    std::vector<Position> m_attack_moves;
-public:
-    Bishop();
-    Bishop(char c, Position starting_position, Board board);
-    virtual void setSymbol();
-    virtual void updateThreat(Board& board);
-    virtual bool validMove(Position target, Board board);
-    virtual void generateMoves(Board board);
-};
 
-class Rook : public Bishop{
-    std::vector<Position> m_attack_moves;
-public:
-    Rook();
-    Rook(char c, Position starting_position, Board board);
-    virtual void setSymbol();
-    virtual void updateThreat(Board& board);
-    bool validMove(Position target, Board board);
-    void generateMoves(Board board);
-};
 

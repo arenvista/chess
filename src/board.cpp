@@ -1,7 +1,7 @@
 #include "board.hpp"
 #include <cctype>
 #include "memory"
-#include "piece.hpp"
+#include "include_piece.hpp"
 #include <iostream>
 
 const char INITAL_THREAT_BOARD[BOARD_SIZE][BOARD_SIZE] = {

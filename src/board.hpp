@@ -1,8 +1,6 @@
 #pragma once
-#include "board.hpp"
 #include "position.hpp"
 #include <memory>
-#include <variant>
 
 class Piece;
 

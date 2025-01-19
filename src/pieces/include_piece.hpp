@@ -1,1 +1,5 @@
-#include "board.hpp"
+#include "piece.hpp"
+#include "pawn.hpp"
+#include "bishop.hpp"
+#include "knight.hpp"
+#include "rook.hpp"
