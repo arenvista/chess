@@ -86,6 +86,9 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
         case 'N':
             std::cout << "Making Knight: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Knight>(p, starting); 
+        case 'Q':
+            std::cout << "Making Queen: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            return std::make_unique<Queen>(p, starting, *this); 
         default:
             return std::make_unique<Pawn>(p, starting);
     }
