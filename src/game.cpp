@@ -29,4 +29,3 @@ void Game::runGame(){
         // m_game_board.printThreatBoard();
     }
 }
-

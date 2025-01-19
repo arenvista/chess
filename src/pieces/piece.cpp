@@ -149,6 +149,7 @@ void Bishop::generateMoves(Board board){
     }
 
 }
+
 bool Bishop::validMove(Position target, Board board){
     Position movement { target.row-m_position.row, target.col-m_position.col};
     bool isAttack {false};
@@ -210,8 +211,8 @@ void Rook::generateMoves(Board board){
         }
     }
     std::cout << "Finished adding moves\n";
-
 }
+
 bool Rook::validMove(Position target, Board board){
     Position movement { target.row-m_position.row, target.col-m_position.col};
     bool isAttack {false};

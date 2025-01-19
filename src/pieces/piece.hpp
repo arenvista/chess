@@ -2,6 +2,7 @@
 #include <vector>
 #include "position.hpp"
 
+
 class Board;
 
 class Piece {
@@ -73,3 +74,4 @@ public:
     bool validMove(Position target, Board board);
     void generateMoves(Board board);
 };
+
