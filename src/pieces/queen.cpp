@@ -13,7 +13,6 @@ void Queen::generateMoves(Board board){
         bool res = board.hasPiece({row+m_position.row, col+m_position.col});
         std::cout << "Row: " << row << "Col: " << col << "Has Piece Result:=" << res  << "\n";
         while(!board.hasPiece({row+m_position.row, col+m_position.col}) && (row<BOARD_SIZE && row > -BOARD_SIZE && col <BOARD_SIZE && col > -BOARD_SIZE) ){
-
                 std::cout << "Adding Move to Queen: " << row << " | " << col << "\n";
                 m_moves.push_back({row,col});
                 //in line
@@ -22,21 +21,10 @@ void Queen::generateMoves(Board board){
                 if(col==0 && row<0){row--;}
                 if(col==0 && row>0){row++;}
                 //in diag
-                if(col>0 && row>0){
-                    col++;
-                    row++;
-                }
-                if(col>0 && row <0){
-                    col++;
-                    row--;
-                }
-                if(col<0 && row <0){
-                    col--;
-                    row--;
-                }
-                if(col<0 && row>0){
-                    col--;
-                    row++;
+                if(col>0 && row>0){ col++; row++; }
+                if(col>0 && row <0){ col++; row--; }
+                if(col<0 && row <0){ col--; row--; }
+                if(col<0 && row>0){ col--; row++;
                 }
             }
         if(board.hasPiece({row, col})){

@@ -4,7 +4,6 @@
 #include <cctype>  
 #include <iostream>
 
-
 //Parent Function ---------------------
 /// Checks if the move to the target position is valid based on the piece's possible moves.
 bool Piece::validMove(Position target, Board board){

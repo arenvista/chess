@@ -21,3 +21,5 @@ enum PieceColor{
 enum Rows{ A, B, C, D, E, F, G, H };
 extern std::unordered_map<char, Rows> rowMap; 
 extern std::unordered_map<int, char> flipRowMap; 
+
+int getDirectionStep(int num);
