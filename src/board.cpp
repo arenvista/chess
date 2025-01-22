@@ -78,19 +78,19 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
         case 'P':
             return std::make_unique<Pawn>(p, starting); 
         case 'B':
-            std::cout << "Making Bishop: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            // std::cout << "Making Bishop: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Bishop>(p, starting, *this); 
         case 'R':
-            std::cout << "Making Rook: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            // std::cout << "Making Rook: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Rook>(p, starting, *this); 
         case 'N':
-            std::cout << "Making Knight: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            // std::cout << "Making Knight: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Knight>(p, starting); 
         case 'Q':
-            std::cout << "Making Queen: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            // std::cout << "Making Queen: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Queen>(p, starting, *this); 
         case 'K':
-            std::cout << "Making King: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            // std::cout << "Making King: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<King>(p, starting); 
         default:
             return std::make_unique<Pawn>(p, starting);
@@ -103,8 +103,17 @@ const char (&Board::getThreatBoard(PieceColor color) const)[BOARD_SIZE][BOARD_SI
 
 //Threat
 void Board::setThreatCell(Position pos, PieceColor color){
-    // std::cout << "Setting Threat... " << pos.row << pos.col << "\n";
     color == WHITE_PIECE ? m_white_attack_board[pos.row][pos.col]='*' : m_black_attack_board[pos.row][pos.col]='*';
+}
+
+char Board::getCell(Position pos){
+    return m_board[pos.row][pos.col];
+}
+
+char (*Board::getBoard())[8]{return m_board;}
+
+char (*Board::getThreatBoard(PieceColor color))[8]{
+    return color == WHITE_PIECE ? m_white_attack_board : m_black_attack_board;
 }
 
 void Board::generateThreatBoard(){
@@ -113,9 +122,11 @@ void Board::generateThreatBoard(){
     for (int i = 0; i < BOARD_SIZE; ++i){
         for (int j = 0; j < BOARD_SIZE; ++j){
             char cell = m_board[i][j];
+               if (cell!='-'){
                 auto piece = getPiece({i,j});
                 // Create a visitor that will call the `move` method on the Piece base class
                 piece->updateThreat(*this);
+            }
         }
     }
 }
@@ -134,4 +145,8 @@ bool Board::kingIsSafe(Position starting, Position ending){
 bool Board::hasPiece(Position target){
     if (m_board[target.row][target.col] == '-'){return false;}
     return true;
+}
+
+void Board::addToBoardDeque(board_t boardTarget){
+    m_deque_board_history.push_back(boardTarget);
 }

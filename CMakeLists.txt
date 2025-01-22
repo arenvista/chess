@@ -16,6 +16,7 @@ add_definitions(-DSOME_DEFINITION)
 
 # Create the executable target with the collected source files
 add_executable(my_app ${sources})
+set_target_properties(my_app PROPERTIES COMPILE_FLAGS "-g")
 
 # Add the base 'src' directory and the 'src/pieces' sub-directory to the include path
 target_include_directories(my_app PUBLIC
