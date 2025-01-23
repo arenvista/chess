@@ -7,7 +7,7 @@
 
 class Piece;
 
-const int BOARD_SIZE = 8;
+constexpr int BOARD_SIZE = 8;
 using board_t = std::array<std::array<char, BOARD_SIZE>, BOARD_SIZE>; // Define the Board type as an 8x8 array
 
 //
@@ -15,6 +15,8 @@ class Board{
     board_t m_board;
     board_t m_white_attack_board;
     board_t m_black_attack_board;
+    Position m_wking_pos;
+    Position m_bking_pos;
 
     std::vector<board_t> m_deque_board_history;           // Vector to hold a history of Boards
     std::vector<board_t> m_deque_white_threat_history;
@@ -44,9 +46,9 @@ public:
 
     char getCell(Position pos);
 
-    bool kingIsSafe(Position starting, Position ending);
-    board_t getBoard();
-    board_t getThreatBoard(PieceColor color);
+    bool kingIsSafe();
+    board_t& getBoard();
+    board_t& getThreatBoard(PieceColor color);
     /// Prints a visual representation of the board showing all threatened squares.
     void printThreatBoard();
     // Generates a board with all possible threats from each piece.

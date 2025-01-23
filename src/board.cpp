@@ -106,8 +106,8 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
     }
  }
 
-board_t Board::getBoard(){return m_board;}
-board_t Board::getThreatBoard(PieceColor color){return color == WHITE_PIECE ? m_white_attack_board : m_black_attack_board;}
+board_t& Board::getBoard(){return m_board;}
+board_t& Board::getThreatBoard(PieceColor color){return color == WHITE_PIECE ? m_white_attack_board : m_black_attack_board;}
 
 //Threat
 void Board::setThreatCell(Position pos, PieceColor color){
@@ -140,7 +140,7 @@ void Board::printThreatBoard(){
     printBoard(m_white_attack_board);
 }
 
-bool Board::kingIsSafe(Position starting, Position ending){
+bool Board::kingIsSafe(){
     return true;
 }
 

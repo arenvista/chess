@@ -6,15 +6,13 @@
 bool Game::attemptMove(Position starting, Position ending){
     auto piece = m_game_board.getPiece(starting);
     std::cout <<"Attempting Move\n";
-    bool safeKing = m_game_board.kingIsSafe(starting, ending);
     bool isValidMove = piece->validMove(ending, m_game_board);
     std::cout <<"Validated Moves...\n";
-    if(isValidMove && safeKing){
+    if(isValidMove){
         std::cout << "Setting Cell...\n";
         m_game_board.setCell(starting, '-');
         m_game_board.setCell(ending, piece->getSymbol());
     }
-    m_game_board.printBoard(m_game_board.getBoard());
     return true;
 }
 
@@ -38,10 +36,16 @@ void Game::runGame(){
             color_match = p->getColor() != turn_count; 
         }
 
-        turn_count = 1 - turn_count;
+        m_game_board.pushtoBoardHistory(m_game_board.getBoard());
         attemptMove(move_pos[0], move_pos[1]);
+        if (!m_game_board.kingIsSafe()){
+            m_game_board.copyToBoard(m_game_board.popFromBoardHistory(), m_game_board.getBoard());
+            continue;
+        }
         std::cout << "Finished move" << "\n";
         m_game_board.generateThreatBoard();
         m_game_board.printThreatBoard();
+        m_game_board.printBoard(m_game_board.getBoard());
+        turn_count = 1 - turn_count; //change turn
     }
 }
