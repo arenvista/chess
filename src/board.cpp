@@ -4,25 +4,26 @@
 #include "include_piece.hpp"
 #include <iostream>
 
-const char INITAL_THREAT_BOARD[BOARD_SIZE][BOARD_SIZE] = {
-    // This represents the pieces on the board.
-    // Keep in mind that pieces[0][0] represents A1
-    // pieces[1][1] represents B2 and so on.
-    // Letters in CAPITAL are white
-    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-    { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }, 
+void Board::copyToBoard(board_t copy, board_t& target){
+    for (int row=0; row<BOARD_SIZE; row++){
+        for(int col=0; col<BOARD_SIZE; col++){
+            target[row][col] = copy[row][col];
+        }
+    }
+}
+
+constexpr board_t INITIAL_THREAT_BOARD = { {
+        { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+        { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+        { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+        { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+        { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+        { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+        { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+        { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
+        }
 };
-const char INITAL_BOARD[BOARD_SIZE][BOARD_SIZE] = {
-    // This represents the pieces on the board.
-    // Keep in mind that pieces[0][0] represents A1
-    // pieces[1][1] represents B2 and so on.
-    // Letters in CAPITAL are white
+constexpr board_t INITIAL_BOARD = {{
     { 'R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R'  },
     { 'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P'  },
     { '-', '-', '-', '-', '-', '-', '-', '-' },
@@ -30,30 +31,38 @@ const char INITAL_BOARD[BOARD_SIZE][BOARD_SIZE] = {
     { '-', '-', '-', '-', '-', '-', '-', '-' },
     { '-', '-', '-', '-', '-', '-', '-', '-' },
     { 'p',  'p',  'p',  'p',  'p',  'p',  'p',  'p'  },
-    { 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r'  }, 
-};
+    { 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r'  }
+}};
 
-void Board::initalizeBoard(char board[BOARD_SIZE][BOARD_SIZE], const char initalizerBoard[BOARD_SIZE][BOARD_SIZE]){
-    for (int i = 0; i < BOARD_SIZE; ++i){
-        for (int j = 0; j < BOARD_SIZE; ++j){
-            board[i][j] = initalizerBoard[i][j];
-        }
-    }
+void Board::initalizeBoard(board_t& board, board_t initalizerBoard){
+    copyToBoard(initalizerBoard, board);
+}
+
+
+void Board::pushtoBoardHistory(board_t board_state){
+    m_deque_board_history.push_back(board_state);
+}
+
+board_t Board::popFromBoardHistory(){
+    board_t prior_state = m_deque_board_history.back();
+    m_deque_board_history.pop_back();
+    return  prior_state;
+}
+
+void Board::resetToLastHistory(){
+    board_t prior_state = popFromBoardHistory();
+    copyToBoard(prior_state, m_board);
 }
 
 Board::Board(){
-    Board::initalizeBoard(m_board, INITAL_BOARD);
+    Board::initalizeBoard(m_board, INITIAL_BOARD);
 }
 
-Board::Board(char board[BOARD_SIZE][BOARD_SIZE]) {
-    for (int i = 0; i < BOARD_SIZE; ++i){
-        for (int j = 0; j < BOARD_SIZE; ++j){
-            m_board[i][j] = board[i][j];
-        }
-    }
+Board::Board(board_t board) {
+    copyToBoard(board, m_board);
 }
 
-void Board::printBoard(const char board[BOARD_SIZE][BOARD_SIZE]){
+void Board::printBoard(board_t board){
     char rows[BOARD_SIZE] = {'A','B','C','D','E','F','G','H'};
     for (int i = 0; i < BOARD_SIZE; ++i){
         std::cout << i << " ";
@@ -97,9 +106,8 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
     }
  }
 
-
-const char (&Board::getBoard() const)[BOARD_SIZE][BOARD_SIZE]{return m_board;}
-const char (&Board::getThreatBoard(PieceColor color) const)[BOARD_SIZE][BOARD_SIZE]{ return color == WHITE_PIECE ? m_white_attack_board : m_black_attack_board; }
+board_t Board::getBoard(){return m_board;}
+board_t Board::getThreatBoard(PieceColor color){return color == WHITE_PIECE ? m_white_attack_board : m_black_attack_board;}
 
 //Threat
 void Board::setThreatCell(Position pos, PieceColor color){
@@ -110,15 +118,9 @@ char Board::getCell(Position pos){
     return m_board[pos.row][pos.col];
 }
 
-char (*Board::getBoard())[8]{return m_board;}
-
-char (*Board::getThreatBoard(PieceColor color))[8]{
-    return color == WHITE_PIECE ? m_white_attack_board : m_black_attack_board;
-}
-
 void Board::generateThreatBoard(){
-    Board::initalizeBoard(m_white_attack_board, INITAL_THREAT_BOARD);
-    Board::initalizeBoard(m_black_attack_board, INITAL_THREAT_BOARD);
+    Board::initalizeBoard(m_white_attack_board, INITIAL_THREAT_BOARD);
+    Board::initalizeBoard(m_black_attack_board, INITIAL_THREAT_BOARD);
     for (int i = 0; i < BOARD_SIZE; ++i){
         for (int j = 0; j < BOARD_SIZE; ++j){
             char cell = m_board[i][j];
