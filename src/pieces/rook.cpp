@@ -11,7 +11,6 @@ void Rook::generateMoves(Board board){
         if (target_row<0 || target_col<0){continue;}
         bool has_piece = board.hasPiece({target_row, target_col}); //stops moving in direction once first piece is hit
         while(!has_piece && target_row<BOARD_SIZE && target_row > -BOARD_SIZE && target_col <BOARD_SIZE && target_col > -BOARD_SIZE){
-            std::cout << "Adding Move to Rook: " << row << " | " << col << "\n";
             m_moves.push_back({row,col});
             if(row==0 && col<0){col--;}
             if(row==0 && col>0){col++;}
@@ -25,7 +24,6 @@ void Rook::generateMoves(Board board){
         target_col = col+m_position.col;
         auto piece = board.getPiece({target_row, target_col});
         if(has_piece && target_row<BOARD_SIZE && target_row > -BOARD_SIZE && target_col <BOARD_SIZE && target_col > -BOARD_SIZE){
-            std::cout << "Adding Attack Move to Rook: " << row << " | " << col << "\n";
             m_attack_moves.push_back({row,col});
         }
     }
