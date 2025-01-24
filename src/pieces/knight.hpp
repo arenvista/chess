@@ -6,5 +6,6 @@ public:
     Knight();
     Knight(char c, Position starting_position);
     bool validMove(Position target, Board board);
+    void updateThreat(Board& board);
     void setSymbol();
 };

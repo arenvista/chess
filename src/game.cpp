@@ -20,7 +20,7 @@ void Game::runGame(){
     m_game_board.printBoard(m_game_board.getBoard());
     int turn_count{WHITE_PIECE};
     while(true){
-        std::string move = "a1a3"; //m_ui.askForMove();
+        std::string move = "b0c2"; //m_ui.askForMove();
         std::string color =  turn_count ==  BLACK_PIECE ? "BLACK_PIECE" : "WHITE_PIECE";
         std::cout << "Move is: " << move << "For Color!!!: " << color << "\n";
         std::array<Position, 2> move_pos = m_ui.parsePositions(move);

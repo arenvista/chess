@@ -93,7 +93,7 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
             // std::cout << "Making Rook: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Rook>(p, starting, *this); 
         case 'N':
-            // std::cout << "Making Knight: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            std::cout << "Making Knight: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Knight>(p, starting); 
         case 'Q':
             // std::cout << "Making Queen: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
