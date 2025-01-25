@@ -8,10 +8,16 @@ bool Game::attemptMove(Position starting, Position ending){
     std::cout <<"Attempting Move\n";
     bool isValidMove = piece->validMove(ending, m_game_board);
     std::cout <<"Validated Moves...\n";
+
     if(isValidMove){
         std::cout << "Setting Cell...\n";
+        m_game_board.pushtoBoardHistory(m_game_board.getBoard());
         m_game_board.setCell(starting, '-');
         m_game_board.setCell(ending, piece->getSymbol());
+        if (!m_game_board.kingIsSafe()){
+            m_game_board.resetToLastHistory();
+            return false;
+        }
     }
     return true;
 }

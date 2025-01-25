@@ -10,19 +10,22 @@ void Bishop::generateMoves(Board board){
     for (Position direction : movements){
         int row = direction.row;
         int col = direction.col;
-        bool res = board.hasPiece({row+m_position.row, col+m_position.col});
+        Position target = {row+m_position.row, col+m_position.col};
+        bool res = board.hasPiece(target);
         //std::cout << "Row: " << row << "Col: " << col << "Has Piece Result:=" << res  << "\n";
-        while(!board.hasPiece({row+m_position.row, col+m_position.col}) ){
-            while(row<BOARD_SIZE && row > -BOARD_SIZE && col <BOARD_SIZE && col > -BOARD_SIZE){
+        while(!res){
+            while(target.row<BOARD_SIZE && target.row > -1 && target.col <BOARD_SIZE && target.col > -1){
                 //std::cout << "Adding Move to Bishop: " << row << " | " << col << "\n";
                 m_moves.push_back({row,col});
                 if(row>0){row++;}
                 else{row--;}
                 if(col>0){col++;}
                 else{col--;}
+                target = {row+m_position.row, col+m_position.col};
+                res = board.hasPiece(target);
             }
         }
-        if(board.hasPiece({row, col})){
+        if(res && target.row<BOARD_SIZE && target.row > -1 && target.col <BOARD_SIZE && target.col > -1){
             m_attack_moves.push_back({row,col});
         }
     }
@@ -55,9 +58,19 @@ bool Bishop::validMove(Position target, Board board){
 
 Bishop::Bishop(char c, Position starting_position, Board board) : Piece(){
     m_position = starting_position;
+    m_color = isupper(c) ? BLACK_PIECE : WHITE_PIECE;
     //std::cout  << "Creating Bishop @: " << starting_position.row << " | " << starting_position.col << "\n";
     generateMoves(board);
     setSymbol();
 }
 
-void Bishop::updateThreat(Board& board){};
+void Bishop::updateThreat(Board& board){
+    for (Position move: m_moves){
+        Position target = {move.row+m_position.row, move.col+m_position.col};
+        board.setThreatCell(target, m_color);
+    }
+    for (Position move: m_attack_moves){
+        Position target = {move.row+m_position.row, move.col+m_position.col};
+        board.setThreatCell(target, m_color);
+    }
+};

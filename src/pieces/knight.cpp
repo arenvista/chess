@@ -35,7 +35,6 @@ bool Knight::validMove(Position target, Board board){
 void Knight::updateThreat(Board& board){
     for (Position attack: m_attack_moves){
         Position attack_pos = {attack.row+m_position.row,  attack.col+m_position.col}; //position to be attacked
-        std::cout << "attacking" << attack_pos.row << flipRowMap[attack_pos.col] << "\n";
         if (attack_pos.row >-1 && attack_pos.col > -1 && attack_pos.row < 8 && attack_pos.col < 8){
             board.setThreatCell(attack_pos, this->m_color); //set cell to threatened under right board_color
         }

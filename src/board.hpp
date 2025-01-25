@@ -15,6 +15,7 @@ class Board{
     board_t m_board;
     board_t m_white_attack_board;
     board_t m_black_attack_board;
+    
     Position m_wking_pos;
     Position m_bking_pos;
 

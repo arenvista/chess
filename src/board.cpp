@@ -56,6 +56,8 @@ void Board::resetToLastHistory(){
 
 Board::Board(){
     Board::initalizeBoard(m_board, INITIAL_BOARD);
+    m_bking_pos = {0, E};
+    m_wking_pos = {7, E};
 }
 
 Board::Board(board_t board) {
@@ -93,7 +95,7 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
             // std::cout << "Making Rook: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Rook>(p, starting, *this); 
         case 'N':
-            std::cout << "Making Knight: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            // std::cout << "Making Knight: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Knight>(p, starting); 
         case 'Q':
             // std::cout << "Making Queen: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
@@ -141,7 +143,19 @@ void Board::printThreatBoard(){
 }
 
 bool Board::kingIsSafe(){
-    return true;
+    Position wk {};
+    Position bk{};
+
+    for (int row=0; row<8; row++){
+        for (int col=0; col<8; col++){
+            char cell = m_board[row][cell];
+            if (cell == 'k'){wk={row,cell};}
+            else if (cell == 'K'){bk={row,cell};}
+        }
+    }
+
+    if(m_white_attack_board[bk.row][bk.col] != '*' && m_black_attack_board[wk.row][wk.col] != '*'){return true;}
+    else{return false;}
 }
 
 bool Board::hasPiece(Position target){

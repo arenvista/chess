@@ -7,4 +7,5 @@ public:
     King(char c, Position starting_position);
     bool validMove(Position target, Board board);
     void setSymbol();
+    void updateThreat(Board& board);
 };
