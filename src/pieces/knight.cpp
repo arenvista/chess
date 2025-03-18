@@ -13,6 +13,16 @@ Knight::Knight(char c, Position starting_position){
 bool Knight::validMove(Position target, Board board){
     Position movement { target.row-m_position.row, target.col-m_position.col};
     bool isAttack {board.hasPiece(target)};
+    bool hasMove = false;
+    for (Position move: m_attack_moves){
+        if (move == movement){
+            hasMove = true;
+        }
+    }
+    if (hasMove == false){
+        return false;
+    }
+
     if (isAttack){
         //std::cout << "is attack\n";
         auto piece_under_attack = board.getPiece(target);

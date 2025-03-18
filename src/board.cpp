@@ -89,7 +89,7 @@ std::unique_ptr<Piece> Board::getPiece(Position starting){
         case 'P':
             return std::make_unique<Pawn>(p, starting); 
         case 'B':
-            // std::cout << "Making Bishop: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
+            std::cout << "Making Bishop: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
             return std::make_unique<Bishop>(p, starting, *this); 
         case 'R':
             // std::cout << "Making Rook: @Location: " <<  starting.row << " | " << starting.col << " OfChar(" << p << ")\n";
@@ -126,13 +126,16 @@ void Board::generateThreatBoard(){
     for (int i = 0; i < BOARD_SIZE; ++i){
         for (int j = 0; j < BOARD_SIZE; ++j){
             char cell = m_board[i][j];
+            std::cout << "Targeting cell " << i << " " << j << "\n";
                if (cell!='-'){
                 auto piece = getPiece({i,j});
+                std::cout <<  "generating for " << piece->getSymbol() << "\n";
                 // Create a visitor that will call the `move` method on the Piece base class
                 piece->updateThreat(*this);
             }
         }
     }
+    return;
 }
 
 void Board::printThreatBoard(){
